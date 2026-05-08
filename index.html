@@ -51,6 +51,8 @@ body{background:var(--bg);color:var(--white);font-family:'Montserrat',sans-serif
 .slide-prev{left:1.5rem}
 .slide-next{right:1.5rem}
 .slide-dots{position:absolute;bottom:1.5rem;right:2rem;display:flex;gap:.5rem;z-index:10}
+.slide-album{position:absolute;bottom:3rem;right:2rem;font-size:.62rem;font-weight:500;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);z-index:10;text-align:right;opacity:0;transform:translateY(8px);transition:opacity .6s .4s ease,transform .6s .4s ease}
+.slide.active .slide-album{opacity:1;transform:translateY(0)}
 .slide-dot{width:6px;height:6px;border-radius:50%;background:rgba(240,237,230,.3);cursor:pointer;border:none;padding:0;transition:background .3s,transform .3s;pointer-events:all}
 .slide-dot.active{background:var(--gold);transform:scale(1.3)}
 .slide-count{position:absolute;top:1.5rem;right:2rem;font-size:.65rem;font-weight:500;letter-spacing:.2em;color:rgba(240,237,230,.5);z-index:10}
@@ -125,7 +127,7 @@ body{background:var(--bg);color:var(--white);font-family:'Montserrat',sans-serif
     <div class="slide-dots" id="slideDots"></div>
   </div>
   <div class="intro-strip">
-    <p>Live music, wildlife, landscapes and sports photography from South Wales. <strong>Available for events, venues and collaborations.</strong></p>
+    <p>Live music and sports photography from South Wales. <strong>Available for events, venues and collaborations.</strong></p>
     <a href="work-with-me.html" class="intro-cta">Work With Me</a>
   </div>
   <div id="latestStrip" style="display:none" class="latest-strip">
@@ -205,7 +207,11 @@ function buildSlideshow(){
     ov.className='slide-overlay';
     var ct=document.createElement('div');
     ct.className='slide-content';
-    ct.innerHTML='<div class="slide-title">Craig Selby</div><span class="slide-eyebrow">'+img.categoryLabel+'</span>';
+    ct.innerHTML='<span class="slide-eyebrow">'+img.categoryLabel+'</span><div class="slide-title">Craig Selby</div>';
+    var ab=document.createElement('div');
+    ab.className='slide-album';
+    ab.textContent=img.title;
+    d.appendChild(ab);
     d.appendChild(im);d.appendChild(ov);d.appendChild(ct);
     ss.insertBefore(d,prev);
   });
