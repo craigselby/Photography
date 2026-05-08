@@ -11,6 +11,10 @@
         {
           "slug": "metal-2-the-masses---inscape",
           "label": "Metal 2 The Masses Inscape"
+        },
+        {
+          "slug": "metal-2-the-masses---mould",
+          "label": "Metal 2 The Masses Mould"
         }
       ]
     },
@@ -392,6 +396,94 @@
       "category": "metal-2-the-masses---inscape",
       "group": "music",
       "categoryLabel": "Metal 2 The Masses Inscape",
+      "featured": false
+    },
+    {
+      "src": "images/music/Metal 2 The Masses - Mould/--001.jpg",
+      "title": "  001",
+      "category": "metal-2-the-masses---mould",
+      "group": "music",
+      "categoryLabel": "Metal 2 The Masses Mould",
+      "featured": false
+    },
+    {
+      "src": "images/music/Metal 2 The Masses - Mould/--002.jpg",
+      "title": "  002",
+      "category": "metal-2-the-masses---mould",
+      "group": "music",
+      "categoryLabel": "Metal 2 The Masses Mould",
+      "featured": false
+    },
+    {
+      "src": "images/music/Metal 2 The Masses - Mould/--003.jpg",
+      "title": "  003",
+      "category": "metal-2-the-masses---mould",
+      "group": "music",
+      "categoryLabel": "Metal 2 The Masses Mould",
+      "featured": false
+    },
+    {
+      "src": "images/music/Metal 2 The Masses - Mould/--004.jpg",
+      "title": "  004",
+      "category": "metal-2-the-masses---mould",
+      "group": "music",
+      "categoryLabel": "Metal 2 The Masses Mould",
+      "featured": false
+    },
+    {
+      "src": "images/music/Metal 2 The Masses - Mould/--005.jpg",
+      "title": "  005",
+      "category": "metal-2-the-masses---mould",
+      "group": "music",
+      "categoryLabel": "Metal 2 The Masses Mould",
+      "featured": false
+    },
+    {
+      "src": "images/music/Metal 2 The Masses - Mould/--006.jpg",
+      "title": "  006",
+      "category": "metal-2-the-masses---mould",
+      "group": "music",
+      "categoryLabel": "Metal 2 The Masses Mould",
+      "featured": false
+    },
+    {
+      "src": "images/music/Metal 2 The Masses - Mould/--007.jpg",
+      "title": "  007",
+      "category": "metal-2-the-masses---mould",
+      "group": "music",
+      "categoryLabel": "Metal 2 The Masses Mould",
+      "featured": false
+    },
+    {
+      "src": "images/music/Metal 2 The Masses - Mould/--008.jpg",
+      "title": "  008",
+      "category": "metal-2-the-masses---mould",
+      "group": "music",
+      "categoryLabel": "Metal 2 The Masses Mould",
+      "featured": false
+    },
+    {
+      "src": "images/music/Metal 2 The Masses - Mould/--009.jpg",
+      "title": "  009",
+      "category": "metal-2-the-masses---mould",
+      "group": "music",
+      "categoryLabel": "Metal 2 The Masses Mould",
+      "featured": false
+    },
+    {
+      "src": "images/music/Metal 2 The Masses - Mould/--010.jpg",
+      "title": "  010",
+      "category": "metal-2-the-masses---mould",
+      "group": "music",
+      "categoryLabel": "Metal 2 The Masses Mould",
+      "featured": false
+    },
+    {
+      "src": "images/music/Metal 2 The Masses - Mould/--011.jpg",
+      "title": "  011",
+      "category": "metal-2-the-masses---mould",
+      "group": "music",
+      "categoryLabel": "Metal 2 The Masses Mould",
       "featured": false
     },
     {
