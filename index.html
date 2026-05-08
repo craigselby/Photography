@@ -153,6 +153,7 @@ async function init(){
     manifest=await r.json();
     manifest.images=manifest.images||[];
     manifest.groups=manifest.groups||[];
+    manifest.featured_covers=manifest.featured_covers||{};
   }catch(e){
     document.getElementById('ssLoading').textContent='Gallery unavailable.';
     document.getElementById('catsLoading').textContent='';
@@ -189,7 +190,17 @@ function buildSlideshow(){
   var ss=document.getElementById('slideshow');
   var loading=document.getElementById('ssLoading');
   if(loading) loading.remove();
-  slides=manifest.images.filter(function(i){return i.featured===true;});
+  // Build slides from featured_covers — one per category, excluded from gallery grid
+  slides=Object.keys(manifest.featured_covers).map(function(catSlug){
+    var src=manifest.featured_covers[catSlug];
+    var catLabel='';
+    manifest.groups.forEach(function(g){
+      g.categories.forEach(function(c){
+        if(c.slug===catSlug) catLabel=c.label;
+      });
+    });
+    return {src:src, categoryLabel:catLabel};
+  });
   if(slides.length===0){
     ss.innerHTML='<div class="slideshow-placeholder"><h1>Craig Selby</h1><p>CS Photography &nbsp;&middot;&nbsp; Port Talbot, Wales</p></div>';
     return;
@@ -201,7 +212,7 @@ function buildSlideshow(){
     var d=document.createElement('div');
     d.className='slide'+(idx===0?' active':'');
     var im=document.createElement('img');
-    im.src=img.src;im.alt=img.title;
+    im.src=img.src; im.alt=img.categoryLabel;
     if(idx>0) im.loading='lazy';
     var ov=document.createElement('div');
     ov.className='slide-overlay';
@@ -210,9 +221,8 @@ function buildSlideshow(){
     ct.innerHTML='<div class="slide-title">Craig Selby</div>';
     var ab=document.createElement('div');
     ab.className='slide-album';
-    ab.textContent=img.title;
-    d.appendChild(ab);
-    d.appendChild(im);d.appendChild(ov);d.appendChild(ct);
+    ab.textContent=img.categoryLabel;
+    d.appendChild(im); d.appendChild(ov); d.appendChild(ct); d.appendChild(ab);
     ss.insertBefore(d,prev);
   });
   var dots=document.getElementById('slideDots');
@@ -294,13 +304,13 @@ function buildCats(){
     grid.className='cat-grid';
     g.categories.forEach(function(c){
       var imgs=manifest.images.filter(function(i){return i.category===c.slug&&i.group===g.slug;});
-      var cover=imgs.find(function(i){return i.featured;})||imgs[0];
+      var coverSrc=(manifest.featured_covers&&manifest.featured_covers[c.slug])||(imgs[0]&&imgs[0].src);
       var a=document.createElement('a');
       a.className='cat-card';
       a.href='gallery.html?cat='+c.slug;
-      if(cover){
+      if(coverSrc){
         var im=document.createElement('img');
-        im.src=cover.src;im.alt=c.label;im.loading='lazy';
+        im.src=coverSrc; im.alt=c.label; im.loading='lazy';
         a.appendChild(im);
       }
       var ov=document.createElement('div');
