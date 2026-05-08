@@ -15,6 +15,10 @@
         {
           "slug": "metal-2-the-masses---mould",
           "label": "Metal 2 The Masses Mould"
+        },
+        {
+          "slug": "metal-2-the-masses---white-leather",
+          "label": "Metal 2 The Masses White Leather"
         }
       ]
     },
@@ -484,6 +488,86 @@
       "category": "metal-2-the-masses---mould",
       "group": "music",
       "categoryLabel": "Metal 2 The Masses Mould",
+      "featured": false
+    },
+    {
+      "src": "images/music/Metal 2 The Masses - White Leather/--001.jpg",
+      "title": "  001",
+      "category": "metal-2-the-masses---white-leather",
+      "group": "music",
+      "categoryLabel": "Metal 2 The Masses White Leather",
+      "featured": false
+    },
+    {
+      "src": "images/music/Metal 2 The Masses - White Leather/--002.jpg",
+      "title": "  002",
+      "category": "metal-2-the-masses---white-leather",
+      "group": "music",
+      "categoryLabel": "Metal 2 The Masses White Leather",
+      "featured": false
+    },
+    {
+      "src": "images/music/Metal 2 The Masses - White Leather/--003.jpg",
+      "title": "  003",
+      "category": "metal-2-the-masses---white-leather",
+      "group": "music",
+      "categoryLabel": "Metal 2 The Masses White Leather",
+      "featured": false
+    },
+    {
+      "src": "images/music/Metal 2 The Masses - White Leather/--004.jpg",
+      "title": "  004",
+      "category": "metal-2-the-masses---white-leather",
+      "group": "music",
+      "categoryLabel": "Metal 2 The Masses White Leather",
+      "featured": false
+    },
+    {
+      "src": "images/music/Metal 2 The Masses - White Leather/--005.jpg",
+      "title": "  005",
+      "category": "metal-2-the-masses---white-leather",
+      "group": "music",
+      "categoryLabel": "Metal 2 The Masses White Leather",
+      "featured": false
+    },
+    {
+      "src": "images/music/Metal 2 The Masses - White Leather/--006.jpg",
+      "title": "  006",
+      "category": "metal-2-the-masses---white-leather",
+      "group": "music",
+      "categoryLabel": "Metal 2 The Masses White Leather",
+      "featured": false
+    },
+    {
+      "src": "images/music/Metal 2 The Masses - White Leather/--007.jpg",
+      "title": "  007",
+      "category": "metal-2-the-masses---white-leather",
+      "group": "music",
+      "categoryLabel": "Metal 2 The Masses White Leather",
+      "featured": false
+    },
+    {
+      "src": "images/music/Metal 2 The Masses - White Leather/--008.jpg",
+      "title": "  008",
+      "category": "metal-2-the-masses---white-leather",
+      "group": "music",
+      "categoryLabel": "Metal 2 The Masses White Leather",
+      "featured": false
+    },
+    {
+      "src": "images/music/Metal 2 The Masses - White Leather/--009.jpg",
+      "title": "  009",
+      "category": "metal-2-the-masses---white-leather",
+      "group": "music",
+      "categoryLabel": "Metal 2 The Masses White Leather",
+      "featured": false
+    },
+    {
+      "src": "images/music/Metal 2 The Masses - White Leather/--010.jpg",
+      "title": "  010",
+      "category": "metal-2-the-masses---white-leather",
+      "group": "music",
+      "categoryLabel": "Metal 2 The Masses White Leather",
       "featured": false
     },
     {
