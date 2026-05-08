@@ -21,10 +21,6 @@
         {
           "slug": "something-fun",
           "label": "Something Fun"
-        },
-        {
-          "slug": "fun2",
-          "label": "Fun2"
         }
       ]
     },
@@ -976,14 +972,6 @@
       "category": "something-fun",
       "group": "general",
       "categoryLabel": "Something Fun",
-      "featured": true
-    },
-    {
-      "src": "images/general/fun2/Header-1.jpg",
-      "title": "Header 1",
-      "category": "fun2",
-      "group": "general",
-      "categoryLabel": "Fun2",
       "featured": true
     },
     {
