@@ -963,24 +963,16 @@
       "featured": false
     },
     {
-      "src": "images/general/Something fun/Header-2.jpg",
-      "title": "Header 2",
+      "src": "images/general/Something fun/--001.jpg",
+      "title": "  001",
       "category": "something-fun",
       "group": "general",
       "categoryLabel": "Something Fun",
       "featured": true
     },
     {
-      "src": "images/general/Something fun/Header-3.jpg",
-      "title": "Header 3",
-      "category": "something-fun",
-      "group": "general",
-      "categoryLabel": "Something Fun",
-      "featured": true
-    },
-    {
-      "src": "images/general/Something fun/Header-4.jpg",
-      "title": "Header 4",
+      "src": "images/general/Something fun/--002.jpg",
+      "title": "  002",
       "category": "something-fun",
       "group": "general",
       "categoryLabel": "Something Fun",
