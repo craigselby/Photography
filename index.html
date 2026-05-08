@@ -205,7 +205,7 @@ function buildSlideshow(){
     ov.className='slide-overlay';
     var ct=document.createElement('div');
     ct.className='slide-content';
-    ct.innerHTML='<span class="slide-eyebrow">'+img.categoryLabel+'</span><div class="slide-title">Craig Selby</div><div class="slide-sub">'+img.title+'</div>';
+    ct.innerHTML='<span class="slide-eyebrow">'+img.categoryLabel+'</span><div class="slide-title">Craig Selby</div>';
     d.appendChild(im);d.appendChild(ov);d.appendChild(ct);
     ss.insertBefore(d,prev);
   });
@@ -253,7 +253,7 @@ function buildLatest(){
     im.src=img.src;im.alt=img.title;im.loading='lazy';
     var ov=document.createElement('div');
     ov.className='latest-card-overlay';
-    ov.innerHTML='<span class="latest-card-title">'+img.title+'</span><span class="latest-card-cat">'+img.categoryLabel+'</span>';
+    ov.innerHTML='<span class="latest-card-cat">'+img.categoryLabel+'</span>';
     a.appendChild(im);a.appendChild(ov);grid.appendChild(a);
   });
 }
