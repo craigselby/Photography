@@ -895,25 +895,65 @@
       "categoryLabel": "Nostalgiafest Sincity"
     },
     {
-      "src": "images/general/Mumbles Test/--001.jpg",
-      "thumb": "thumbs/general/Mumbles Test/--001.jpg",
-      "title": "  001",
+      "src": "images/general/Mumbles Test/mumbles-1.jpg",
+      "thumb": "thumbs/general/Mumbles Test/mumbles-1.jpg",
+      "title": "Mumbles 1",
       "category": "mumbles-test",
       "group": "general",
       "categoryLabel": "Mumbles Test"
     },
     {
-      "src": "images/general/Mumbles Test/--002.jpg",
-      "thumb": "thumbs/general/Mumbles Test/--002.jpg",
-      "title": "  002",
+      "src": "images/general/Mumbles Test/mumbles-2.jpg",
+      "thumb": "thumbs/general/Mumbles Test/mumbles-2.jpg",
+      "title": "Mumbles 2",
       "category": "mumbles-test",
       "group": "general",
       "categoryLabel": "Mumbles Test"
     },
     {
-      "src": "images/general/Mumbles Test/--003.jpg",
-      "thumb": "thumbs/general/Mumbles Test/--003.jpg",
-      "title": "  003",
+      "src": "images/general/Mumbles Test/mumbles-3.jpg",
+      "thumb": "thumbs/general/Mumbles Test/mumbles-3.jpg",
+      "title": "Mumbles 3",
+      "category": "mumbles-test",
+      "group": "general",
+      "categoryLabel": "Mumbles Test"
+    },
+    {
+      "src": "images/general/Mumbles Test/mumbles-4.jpg",
+      "thumb": "thumbs/general/Mumbles Test/mumbles-4.jpg",
+      "title": "Mumbles 4",
+      "category": "mumbles-test",
+      "group": "general",
+      "categoryLabel": "Mumbles Test"
+    },
+    {
+      "src": "images/general/Mumbles Test/mumbles-5.jpg",
+      "thumb": "thumbs/general/Mumbles Test/mumbles-5.jpg",
+      "title": "Mumbles 5",
+      "category": "mumbles-test",
+      "group": "general",
+      "categoryLabel": "Mumbles Test"
+    },
+    {
+      "src": "images/general/Mumbles Test/mumbles-6.jpg",
+      "thumb": "thumbs/general/Mumbles Test/mumbles-6.jpg",
+      "title": "Mumbles 6",
+      "category": "mumbles-test",
+      "group": "general",
+      "categoryLabel": "Mumbles Test"
+    },
+    {
+      "src": "images/general/Mumbles Test/mumbles-7.jpg",
+      "thumb": "thumbs/general/Mumbles Test/mumbles-7.jpg",
+      "title": "Mumbles 7",
+      "category": "mumbles-test",
+      "group": "general",
+      "categoryLabel": "Mumbles Test"
+    },
+    {
+      "src": "images/general/Mumbles Test/mumbles-8.jpg",
+      "thumb": "thumbs/general/Mumbles Test/mumbles-8.jpg",
+      "title": "Mumbles 8",
       "category": "mumbles-test",
       "group": "general",
       "categoryLabel": "Mumbles Test"
@@ -1944,11 +1984,11 @@
     }
   ],
   "featured_covers": {
-    "mumbles-test": "images/general/Mumbles Test/--001.jpg",
+    "mumbles-test": "images/general/Mumbles Test/mumbles-1.jpg",
     "metal-2-the-masses---house-of-hosts": "images/music/Metal 2 The Masses - House of Hosts/--017.jpg"
   },
   "featured_thumbs": {
-    "mumbles-test": "thumbs/general/Mumbles Test/--001.jpg",
+    "mumbles-test": "thumbs/general/Mumbles Test/mumbles-1.jpg",
     "metal-2-the-masses---house-of-hosts": "thumbs/music/Metal 2 The Masses - House of Hosts/--017.jpg"
   }
 }
