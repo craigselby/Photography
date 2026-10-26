@@ -11,6 +11,16 @@
       ]
     },
     {
+      "slug": "general",
+      "label": "General",
+      "categories": [
+        {
+          "slug": "mumbles-test",
+          "label": "Mumbles Test"
+        }
+      ]
+    },
+    {
       "slug": "music",
       "label": "Music",
       "categories": [
@@ -778,6 +788,13 @@
       "category": "nostalgiafest---sincity",
       "group": "latest",
       "categoryLabel": "Nostalgiafest Sincity"
+    },
+    {
+      "src": "images/general/Mumbles Test/--001.jpg",
+      "title": "  001",
+      "category": "mumbles-test",
+      "group": "general",
+      "categoryLabel": "Mumbles Test"
     },
     {
       "src": "images/music/Metal 2 The Masses - House of Hosts/--001.jpg",
