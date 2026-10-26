@@ -42,8 +42,8 @@ jobs:
                   low = word.lower()
                   result.append(overrides[low] if low in overrides else word.capitalize())
               return ' '.join(result)
-
-                    def extract_keywords(filepath):
+              
+          def extract_keywords(filepath):
               keywords = []
               try:
                   with open(filepath, 'rb') as f:
