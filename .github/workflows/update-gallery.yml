@@ -43,17 +43,15 @@ jobs:
                   result.append(overrides[low] if low in overrides else word.capitalize())
               return ' '.join(result)
 
-          def extract_keywords(filepath):
+                    def extract_keywords(filepath):
               keywords = []
               try:
                   with open(filepath, 'rb') as f:
                       data = f.read()
-                  xmp_start = data.find(b'<x:xmpmeta')
-                  xmp_end = data.find(b'</x:xmpmeta>')
-                  if xmp_start != -1 and xmp_end != -1:
-                      xmp = data[xmp_start:xmp_end + 12].decode('utf-8', errors='ignore')
-                      subjects = re.findall(r'<rdf:li[^>]*>([^<]+)</rdf:li>', xmp)
-                      keywords = [s.strip().lower() for s in subjects if s.strip()]
+                  for m in re.finditer(rb'<x:xmpmeta.*?</x:xmpmeta>', data, re.S):
+                      xmp = m.group(0).decode('utf-8', errors='ignore')
+                      for block in re.findall(r'<dc:subject>.*?</dc:subject>', xmp, re.S):
+                          keywords += [s.strip().lower() for s in re.findall(r'<rdf:li[^>]*>([^<]+)</rdf:li>', block) if s.strip()]
               except Exception as e:
                   print(f'  Warning: could not read metadata from {filepath}: {e}')
               return keywords
