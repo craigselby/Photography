@@ -790,13 +790,6 @@
       "categoryLabel": "Nostalgiafest Sincity"
     },
     {
-      "src": "images/general/Mumbles Test/--001.jpg",
-      "title": "  001",
-      "category": "mumbles-test",
-      "group": "general",
-      "categoryLabel": "Mumbles Test"
-    },
-    {
       "src": "images/general/Mumbles Test/--002.jpg",
       "title": "  002",
       "category": "mumbles-test",
@@ -1694,6 +1687,7 @@
     }
   ],
   "featured_covers": {
+    "mumbles-test": "images/general/Mumbles Test/--001.jpg",
     "metal-2-the-masses---house-of-hosts": "images/music/Metal 2 The Masses - House of Hosts/--017.jpg"
   }
 }
