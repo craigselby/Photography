@@ -22,6 +22,7 @@ jobs:
         run: |
           python3 << 'EOF'
           import os, json, re
+          from PIL import Image, ImageOps
 
           IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.webp'}
           GROUPS = ['latest', 'general', 'music', 'sports']
@@ -56,7 +57,27 @@ jobs:
                   print(f'  Warning: could not read metadata from {filepath}: {e}')
               return keywords
 
-          manifest = {'groups': [], 'images': [], 'featured_covers': {}}
+          THUMB_SHORT_SIDE = 640
+          kept_thumbs = set()
+
+          def make_thumb(src):
+              # Mirror images/<group>/<category>/<file> into thumbs/, shortest side 640px
+              dest = os.path.splitext(os.path.join('thumbs', os.path.relpath(src, 'images')))[0] + '.jpg'
+              dest = dest.replace(os.sep, '/')
+              kept_thumbs.add(dest)
+              if not os.path.exists(dest):
+                  os.makedirs(os.path.dirname(dest), exist_ok=True)
+                  with Image.open(src) as im:
+                      im = ImageOps.exif_transpose(im).convert('RGB')
+                      w, h = im.size
+                      scale = THUMB_SHORT_SIDE / min(w, h)
+                      if scale < 1:
+                          im = im.resize((round(w * scale), round(h * scale)), Image.LANCZOS)
+                      im.save(dest, 'JPEG', quality=78, optimize=True, progressive=True)
+              return dest
+
+          manifest = {'groups': [], 'images': [], 'featured_covers': {}, 'featured_thumbs': {}}
+          os.makedirs('thumbs', exist_ok=True)
           images_root = 'images'
 
           if not os.path.exists(images_root):
@@ -93,6 +114,7 @@ jobs:
                       if featured:
                           # Store as cover only — excluded from gallery grid
                           manifest['featured_covers'][cat_slug] = f'images/{group}/{category}/{fname}'
+                          manifest['featured_thumbs'][cat_slug] = make_thumb(fpath)
                           featured_count += 1
                           print(f'  [FEATURED] {fname}')
                       else:
@@ -100,6 +122,7 @@ jobs:
                           title = os.path.splitext(fname)[0].replace('-', ' ').replace('_', ' ').title()
                           manifest['images'].append({
                               'src': f'images/{group}/{category}/{fname}',
+                              'thumb': make_thumb(fpath),
                               'title': title,
                               'category': cat_slug,
                               'group': group,
@@ -115,6 +138,15 @@ jobs:
                       'categories': categories
                   })
 
+          # Remove thumbnails whose original photo no longer exists
+          for root, dirs, files in os.walk('thumbs', topdown=False):
+              for name in files:
+                  path = os.path.join(root, name).replace(os.sep, '/')
+                  if path not in kept_thumbs:
+                      os.remove(path)
+              if root != 'thumbs' and not os.listdir(root):
+                  os.rmdir(root)
+
           with open('images.json', 'w') as f:
               json.dump(manifest, f, indent=2)
 
@@ -125,6 +157,6 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add images.json
+          git add -A images.json thumbs
           git diff --staged --quiet || git commit -m "Auto-update gallery manifest [skip ci]"
           git push

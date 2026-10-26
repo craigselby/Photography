@@ -275,7 +275,7 @@ function buildLatest(){
     a.className='latest-card';
     a.href='gallery.html?cat='+img.category;
     var im=document.createElement('img');
-    im.src=img.src;im.alt=img.title;im.loading='lazy';
+    im.src=img.thumb||img.src;im.alt=img.title;im.loading='lazy';
     var ov=document.createElement('div');
     ov.className='latest-card-overlay';
     ov.innerHTML='<span class="latest-card-cat">'+img.categoryLabel+'</span>';
@@ -313,7 +313,7 @@ function buildCats(){
     grid.className='cat-grid';
     g.categories.forEach(function(c){
       var imgs=manifest.images.filter(function(i){return i.category===c.slug&&i.group===g.slug;});
-      var coverSrc=(manifest.featured_covers&&manifest.featured_covers[c.slug])||(imgs[0]&&imgs[0].src);
+      var coverSrc=(manifest.featured_thumbs&&manifest.featured_thumbs[c.slug])||(manifest.featured_covers&&manifest.featured_covers[c.slug])||(imgs[0]&&(imgs[0].thumb||imgs[0].src));
       var a=document.createElement('a');
       a.className='cat-card';
       a.href='gallery.html?cat='+c.slug;

@@ -540,7 +540,7 @@ function render(type, val){
     item.onkeydown = function(e){ if(e.key === 'Enter' || e.key === ' ') openLb(idx); };
 
     var im = document.createElement('img');
-    im.src = img.src;
+    im.src = img.thumb || img.src;
     im.alt = img.title;
     im.loading = 'lazy';
     /* Let browser choose focal point; can be overridden per-image if needed */
@@ -571,6 +571,7 @@ function updateLb(){
   var el = document.getElementById('lbImg');
   el.src = img.src;
   el.alt = img.title;
+  [lbIdx + 1, lbIdx - 1].forEach(function(n){ if(visible[n]){ new Image().src = visible[n].src; } });
   document.getElementById('lbTitle').textContent = img.title;
   document.getElementById('lbCat').textContent = img.categoryLabel;
   document.getElementById('lbCounter').textContent = (lbIdx + 1) + ' / ' + visible.length;
