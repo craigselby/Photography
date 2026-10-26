@@ -11,16 +11,6 @@
       ]
     },
     {
-      "slug": "general",
-      "label": "General",
-      "categories": [
-        {
-          "slug": "something-fun",
-          "label": "Something Fun"
-        }
-      ]
-    },
-    {
       "slug": "music",
       "label": "Music",
       "categories": [
@@ -788,13 +778,6 @@
       "category": "nostalgiafest---sincity",
       "group": "latest",
       "categoryLabel": "Nostalgiafest Sincity"
-    },
-    {
-      "src": "images/general/Something fun/--001.jpg",
-      "title": "  001",
-      "category": "something-fun",
-      "group": "general",
-      "categoryLabel": "Something Fun"
     },
     {
       "src": "images/music/Metal 2 The Masses - House of Hosts/--001.jpg",
