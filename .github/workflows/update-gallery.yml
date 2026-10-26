@@ -111,24 +111,24 @@ jobs:
                       keywords = extract_keywords(fpath)
                       featured = 'featured' in keywords
 
+                      # Every photo goes in the gallery; featured ones also become the category cover
+                      title = os.path.splitext(fname)[0].replace('-', ' ').replace('_', ' ').title()
+                      thumb = make_thumb(fpath)
+                      manifest['images'].append({
+                          'src': f'images/{group}/{category}/{fname}',
+                          'thumb': thumb,
+                          'title': title,
+                          'category': cat_slug,
+                          'group': group,
+                          'categoryLabel': cat_label,
+                      })
+                      total_count += 1
+
                       if featured:
-                          # Store as cover only — excluded from gallery grid
                           manifest['featured_covers'][cat_slug] = f'images/{group}/{category}/{fname}'
-                          manifest['featured_thumbs'][cat_slug] = make_thumb(fpath)
+                          manifest['featured_thumbs'][cat_slug] = thumb
                           featured_count += 1
                           print(f'  [FEATURED] {fname}')
-                      else:
-                          # Normal gallery image
-                          title = os.path.splitext(fname)[0].replace('-', ' ').replace('_', ' ').title()
-                          manifest['images'].append({
-                              'src': f'images/{group}/{category}/{fname}',
-                              'thumb': make_thumb(fpath),
-                              'title': title,
-                              'category': cat_slug,
-                              'group': group,
-                              'categoryLabel': cat_label,
-                          })
-                          total_count += 1
 
               if categories:
                   group_label = 'Latest Work' if group == 'latest' else group.capitalize()
