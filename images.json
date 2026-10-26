@@ -15,6 +15,10 @@
       "label": "General",
       "categories": [
         {
+          "slug": "gnoll-test",
+          "label": "Gnoll Test"
+        },
+        {
           "slug": "mumbles-test",
           "label": "Mumbles Test"
         }
@@ -893,6 +897,30 @@
       "category": "nostalgiafest---sincity",
       "group": "latest",
       "categoryLabel": "Nostalgiafest Sincity"
+    },
+    {
+      "src": "images/general/Gnoll test/Gnoll-1.jpg",
+      "thumb": "thumbs/general/Gnoll test/Gnoll-1.jpg",
+      "title": "Gnoll 1",
+      "category": "gnoll-test",
+      "group": "general",
+      "categoryLabel": "Gnoll Test"
+    },
+    {
+      "src": "images/general/Gnoll test/Gnoll-2.jpg",
+      "thumb": "thumbs/general/Gnoll test/Gnoll-2.jpg",
+      "title": "Gnoll 2",
+      "category": "gnoll-test",
+      "group": "general",
+      "categoryLabel": "Gnoll Test"
+    },
+    {
+      "src": "images/general/Gnoll test/Gnoll-3.jpg",
+      "thumb": "thumbs/general/Gnoll test/Gnoll-3.jpg",
+      "title": "Gnoll 3",
+      "category": "gnoll-test",
+      "group": "general",
+      "categoryLabel": "Gnoll Test"
     },
     {
       "src": "images/general/Mumbles Test/mumbles-1.jpg",
