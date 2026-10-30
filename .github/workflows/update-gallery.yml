@@ -1,4 +1,5 @@
-name: Update Gallery Manifest
+name: "1 - Build gallery (thumbnails + manifest)"
+run-name: "Gallery build: ${{ github.event.head_commit.message }}"
 
 on:
   push:
