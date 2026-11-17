@@ -983,14 +983,6 @@
       "categoryLabel": "Mumbles Test"
     },
     {
-      "src": "images/general/Mumbles Test/mumbles-8.jpg",
-      "thumb": "thumbs/general/Mumbles Test/mumbles-8.jpg",
-      "title": "Mumbles 8",
-      "category": "mumbles-test",
-      "group": "general",
-      "categoryLabel": "Mumbles Test"
-    },
-    {
       "src": "images/music/In It Together - Professor Green/In It Together - Professor Green-1.jpg",
       "thumb": "thumbs/music/In It Together - Professor Green/In It Together - Professor Green-1.jpg",
       "title": "In It Together   Professor Green 1",
@@ -1790,5 +1782,23 @@
     "m2tm---inscape": "thumbs/music/M2tM - Inscape/M2tM - Inscape-1.jpg",
     "m2tm---mould": "thumbs/music/M2tM - Mould/M2tM - Mould-1.jpg",
     "m2tm---white-leather": "thumbs/music/M2tM - White Leather/M2tM - White Leather-1.jpg"
-  }
+  },
+  "highlights": [
+    {
+      "src": "images/music/M2tM - House of Hosts/M2tM - House of Hosts-1.jpg",
+      "thumb": "thumbs/music/M2tM - House of Hosts/M2tM - House of Hosts-1.jpg",
+      "title": "M2Tm   House Of Hosts 1",
+      "category": "m2tm---house-of-hosts",
+      "group": "music",
+      "categoryLabel": "M2tm House Of Hosts"
+    },
+    {
+      "src": "images/music/M2tM - House of Hosts/M2tM - House of Hosts-5.jpg",
+      "thumb": "thumbs/music/M2tM - House of Hosts/M2tM - House of Hosts-5.jpg",
+      "title": "M2Tm   House Of Hosts 5",
+      "category": "m2tm---house-of-hosts",
+      "group": "music",
+      "categoryLabel": "M2tm House Of Hosts"
+    }
+  ]
 }
