@@ -77,7 +77,7 @@ jobs:
                       im.save(dest, 'JPEG', quality=78, optimize=True, progressive=True)
               return dest
 
-          manifest = {'groups': [], 'images': [], 'featured_covers': {}, 'featured_thumbs': {}}
+          manifest = {'groups': [], 'images': [], 'featured_covers': {}, 'featured_thumbs': {}, 'highlights': []}
           os.makedirs('thumbs', exist_ok=True)
           images_root = 'images'
 
@@ -111,6 +111,7 @@ jobs:
                       fpath = os.path.join(cat_path, fname)
                       keywords = extract_keywords(fpath)
                       featured = 'featured' in keywords
+                      highlight = 'highlight' in keywords
 
                       # Every photo goes in the gallery; featured ones also become the category cover
                       title = os.path.splitext(fname)[0].replace('-', ' ').replace('_', ' ').title()
@@ -124,6 +125,9 @@ jobs:
                           'categoryLabel': cat_label,
                       })
                       total_count += 1
+
+                      if highlight:
+                          manifest['highlights'].append(dict(manifest['images'][-1]))
 
                       if featured:
                           manifest['featured_covers'][cat_slug] = f'images/{group}/{category}/{fname}'
@@ -151,7 +155,7 @@ jobs:
           with open('images.json', 'w') as f:
               json.dump(manifest, f, indent=2)
 
-          print(f'Done: {total_count} gallery images, {featured_count} featured covers')
+          print(f'Done: {total_count} gallery images, {featured_count} featured covers, {len(manifest["highlights"])} highlights')
           EOF
 
       - name: Commit manifest

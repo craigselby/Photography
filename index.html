@@ -139,6 +139,12 @@ body{background:var(--bg);color:var(--white);font-family:'Montserrat',sans-serif
     <p>Live music and sports photography from South Wales. <strong>Available for events, venues and collaborations.</strong></p>
     <a href="work-with-me.html" class="intro-cta">Work With Me</a>
   </div>
+  <div id="highlightsStrip" style="display:none" class="latest-strip">
+    <div class="latest-header">
+      <span class="latest-eyebrow">Highlights</span>
+    </div>
+    <div class="latest-grid" id="highlightsGrid"></div>
+  </div>
   <div id="latestStrip" style="display:none" class="latest-strip">
     <div class="latest-header">
       <span class="latest-eyebrow">Latest Work</span>
@@ -170,6 +176,7 @@ async function init(){
   }
   buildNav();
   buildSlideshow();
+  buildHighlights();
   buildLatest();
   buildCats();
 }
@@ -259,6 +266,25 @@ function updateCount(){
 }
 function startTimer(){if(slides.length<=1) return;timer=setInterval(function(){goTo(cur+1);},5000);}
 function resetTimer(){clearInterval(timer);startTimer();}
+
+function buildHighlights(){
+  var picks=(manifest.highlights||[]).slice(0,12);
+  if(picks.length===0) return;
+  document.getElementById('highlightsStrip').style.display='block';
+  var grid=document.getElementById('highlightsGrid');
+  picks.forEach(function(img){
+    var a=document.createElement('a');
+    a.className='latest-card';
+    a.href='gallery.html?cat='+img.category;
+    var im=document.createElement('img');
+    im.src=img.thumb||img.src;im.alt=img.title;im.loading='lazy';
+    var ov=document.createElement('div');
+    ov.className='latest-card-overlay';
+    var cat=document.createElement('span');
+    cat.className='latest-card-cat';cat.textContent=img.categoryLabel;
+    ov.appendChild(cat);a.appendChild(im);a.appendChild(ov);grid.appendChild(a);
+  });
+}
 
 function buildLatest(){
   var latestImgs=manifest.images.filter(function(i){return i.group==='latest';});
