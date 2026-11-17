@@ -145,13 +145,6 @@ body{background:var(--bg);color:var(--white);font-family:'Montserrat',sans-serif
     </div>
     <div class="latest-grid" id="highlightsGrid"></div>
   </div>
-  <div id="latestStrip" style="display:none" class="latest-strip">
-    <div class="latest-header">
-      <span class="latest-eyebrow">Latest Work</span>
-      <a href="gallery.html?group=latest" class="latest-viewall">View all latest &#8250;</a>
-    </div>
-    <div class="latest-grid" id="latestGrid"></div>
-  </div>
   <div class="categories-section" id="catsSection">
     <p class="loading-msg" id="catsLoading">Loading galleries...</p>
   </div>
@@ -177,7 +170,6 @@ async function init(){
   buildNav();
   buildSlideshow();
   buildHighlights();
-  buildLatest();
   buildCats();
 }
 
@@ -283,26 +275,6 @@ function buildHighlights(){
     var cat=document.createElement('span');
     cat.className='latest-card-cat';cat.textContent=img.categoryLabel;
     ov.appendChild(cat);a.appendChild(im);a.appendChild(ov);grid.appendChild(a);
-  });
-}
-
-function buildLatest(){
-  var latestImgs=manifest.images.filter(function(i){return i.group==='latest';});
-  if(latestImgs.length===0) return;
-  document.getElementById('latestStrip').style.display='block';
-  var grid=document.getElementById('latestGrid');
-  // show up to 9 preview images across all latest categories
-  var preview=latestImgs.slice(0,9);
-  preview.forEach(function(img){
-    var a=document.createElement('a');
-    a.className='latest-card';
-    a.href='gallery.html?cat='+img.category;
-    var im=document.createElement('img');
-    im.src=img.thumb||img.src;im.alt=img.title;im.loading='lazy';
-    var ov=document.createElement('div');
-    ov.className='latest-card-overlay';
-    ov.innerHTML='<span class="latest-card-cat">'+img.categoryLabel+'</span>';
-    a.appendChild(im);a.appendChild(ov);grid.appendChild(a);
   });
 }
 
