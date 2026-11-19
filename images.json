@@ -37,8 +37,13 @@
         {
           "slug": "in-it-together-2026",
           "label": "In It Together 2026",
-          "count": 8,
+          "count": 15,
           "acts": [
+            {
+              "slug": "joel-corry",
+              "label": "Joel Corry",
+              "count": 7
+            },
             {
               "slug": "professor-green",
               "label": "Professor Green",
@@ -1240,6 +1245,76 @@
       "actLabel": null
     },
     {
+      "src": "images/music/In It Together 2026/Joel Corry/untitled-1.jpg",
+      "thumb": "thumbs/music/In It Together 2026/Joel Corry/untitled-1.jpg",
+      "title": "Joel Corry",
+      "category": "in-it-together-2026",
+      "group": "music",
+      "categoryLabel": "In It Together 2026",
+      "act": "joel-corry",
+      "actLabel": "Joel Corry"
+    },
+    {
+      "src": "images/music/In It Together 2026/Joel Corry/untitled-2.jpg",
+      "thumb": "thumbs/music/In It Together 2026/Joel Corry/untitled-2.jpg",
+      "title": "Joel Corry",
+      "category": "in-it-together-2026",
+      "group": "music",
+      "categoryLabel": "In It Together 2026",
+      "act": "joel-corry",
+      "actLabel": "Joel Corry"
+    },
+    {
+      "src": "images/music/In It Together 2026/Joel Corry/untitled-3.jpg",
+      "thumb": "thumbs/music/In It Together 2026/Joel Corry/untitled-3.jpg",
+      "title": "Joel Corry",
+      "category": "in-it-together-2026",
+      "group": "music",
+      "categoryLabel": "In It Together 2026",
+      "act": "joel-corry",
+      "actLabel": "Joel Corry"
+    },
+    {
+      "src": "images/music/In It Together 2026/Joel Corry/untitled-4.jpg",
+      "thumb": "thumbs/music/In It Together 2026/Joel Corry/untitled-4.jpg",
+      "title": "Joel Corry",
+      "category": "in-it-together-2026",
+      "group": "music",
+      "categoryLabel": "In It Together 2026",
+      "act": "joel-corry",
+      "actLabel": "Joel Corry"
+    },
+    {
+      "src": "images/music/In It Together 2026/Joel Corry/untitled-5.jpg",
+      "thumb": "thumbs/music/In It Together 2026/Joel Corry/untitled-5.jpg",
+      "title": "Joel Corry",
+      "category": "in-it-together-2026",
+      "group": "music",
+      "categoryLabel": "In It Together 2026",
+      "act": "joel-corry",
+      "actLabel": "Joel Corry"
+    },
+    {
+      "src": "images/music/In It Together 2026/Joel Corry/untitled-6.jpg",
+      "thumb": "thumbs/music/In It Together 2026/Joel Corry/untitled-6.jpg",
+      "title": "Joel Corry",
+      "category": "in-it-together-2026",
+      "group": "music",
+      "categoryLabel": "In It Together 2026",
+      "act": "joel-corry",
+      "actLabel": "Joel Corry"
+    },
+    {
+      "src": "images/music/In It Together 2026/Joel Corry/untitled-7.jpg",
+      "thumb": "thumbs/music/In It Together 2026/Joel Corry/untitled-7.jpg",
+      "title": "Joel Corry",
+      "category": "in-it-together-2026",
+      "group": "music",
+      "categoryLabel": "In It Together 2026",
+      "act": "joel-corry",
+      "actLabel": "Joel Corry"
+    },
+    {
       "src": "images/music/In It Together 2026/Professor Green/In It Together - Professor Green-1.jpg",
       "thumb": "thumbs/music/In It Together 2026/Professor Green/In It Together - Professor Green-1.jpg",
       "title": "Professor Green",
@@ -2231,6 +2306,26 @@
     "metal-2-the-masses-2026": "thumbs/music/Metal 2 The Masses 2026/White Leather/M2tM - White Leather-1.jpg"
   },
   "highlights": [
+    {
+      "src": "images/music/In It Together 2026/Joel Corry/untitled-7.jpg",
+      "thumb": "thumbs/music/In It Together 2026/Joel Corry/untitled-7.jpg",
+      "title": "Joel Corry",
+      "category": "in-it-together-2026",
+      "group": "music",
+      "categoryLabel": "In It Together 2026",
+      "act": "joel-corry",
+      "actLabel": "Joel Corry"
+    },
+    {
+      "src": "images/music/In It Together 2026/Professor Green/In It Together - Professor Green-2.jpg",
+      "thumb": "thumbs/music/In It Together 2026/Professor Green/In It Together - Professor Green-2.jpg",
+      "title": "Professor Green",
+      "category": "in-it-together-2026",
+      "group": "music",
+      "categoryLabel": "In It Together 2026",
+      "act": "professor-green",
+      "actLabel": "Professor Green"
+    },
     {
       "src": "images/music/Metal 2 The Masses 2026/House of Hosts/M2tM - House of Hosts-1.jpg",
       "thumb": "thumbs/music/Metal 2 The Masses 2026/House of Hosts/M2tM - House of Hosts-1.jpg",
