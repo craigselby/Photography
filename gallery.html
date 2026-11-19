@@ -150,6 +150,37 @@ body{
 .filter-btn:hover{color:var(--white);border-color:var(--border)}
 .filter-btn.active{color:var(--bg);background:var(--gold);border-color:var(--gold)}
 
+/* ── Act chips (event pages with 2+ acts) ────────────────── */
+.filter-bar.acts-bar{
+  position:sticky;top:0;z-index:30;
+  padding:.8rem 1.8rem;gap:.5rem;
+  background:rgba(19,19,28,.96);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  box-shadow:0 1px 0 var(--border),0 8px 18px rgba(0,0,0,.35);
+}
+.acts-bar .filter-label{color:var(--gold)}
+.acts-bar .filter-btn{
+  display:inline-flex;align-items:center;gap:.5rem;
+  color:var(--white);border:1px solid rgba(240,237,230,.22);
+  padding:.5rem .9rem;font-size:.62rem;
+}
+.acts-bar .filter-btn:hover{color:var(--gold-l);border-color:var(--gold)}
+.acts-bar .filter-btn.active{color:var(--bg);background:var(--gold);border-color:var(--gold)}
+.chip-count{font-size:.56rem;letter-spacing:.05em;opacity:.55}
+.acts-bar .filter-btn.active .chip-count{opacity:.75}
+
+/* Act section headers inside the "All" view */
+.act-head{
+  grid-column:1/-1;
+  display:flex;align-items:baseline;gap:.9rem;
+  padding:1.9rem 1.8rem .8rem;
+}
+.act-head:first-child{padding-top:1rem}
+.act-head::after{content:'';flex:1;height:1px;background:var(--border);align-self:center}
+.act-head-name{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;color:var(--white);line-height:1}
+.act-head-count{font-size:.58rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);order:2}
+.act-head::after{order:3}
+
 /* ── Gallery wrapper ─────────────────────────────────────── */
 .gallery{padding:0;flex:1}
 
@@ -354,6 +385,19 @@ body{
   /* Tighter padding on small screens */
   .topbar{padding:1rem 1rem 1rem 4rem}
   .filter-bar{padding:.65rem 1rem}
+  /* Act chips become one swipeable row instead of a wrapping block */
+  .filter-bar.acts-bar{
+    position:static;flex-wrap:nowrap;overflow-x:auto;
+    padding:.75rem 2rem .75rem 1rem;
+    scrollbar-width:none;-webkit-overflow-scrolling:touch;
+    -webkit-mask-image:linear-gradient(to right,#000 calc(100% - 28px),transparent);
+    mask-image:linear-gradient(to right,#000 calc(100% - 28px),transparent);
+    box-shadow:0 1px 0 var(--border);
+  }
+  .filter-bar.acts-bar::-webkit-scrollbar{display:none}
+  .acts-bar .filter-btn,.acts-bar .filter-label{flex:0 0 auto;white-space:nowrap}
+  .act-head{padding:1.5rem 1rem .6rem}
+  .act-head-name{font-size:1.35rem}
   .gallery-header{padding:.85rem 1rem .65rem}
   /* Full-screen lightbox on mobile */
   .lightbox-img-wrap{padding:3rem 0 0}
@@ -525,25 +569,41 @@ function showEvent(slug, actSlug, navBtn){
 function buildActBar(ev, selected){
   var bar = document.getElementById('filterBar');
   bar.style.display = '';
+  bar.className = 'filter-bar acts-bar';
   bar.innerHTML = '';
   var lbl = document.createElement('span');
   lbl.className = 'filter-label';
   lbl.textContent = 'Acts';
   bar.appendChild(lbl);
-  function chip(text, actSlug){
+  function chip(text, count, actSlug){
     var b = document.createElement('button');
     b.className = 'filter-btn' + ((selected || null) === actSlug ? ' active' : '');
-    b.textContent = text;
+    b.appendChild(document.createTextNode(text));
+    var n = document.createElement('span');
+    n.className = 'chip-count';
+    n.textContent = count;
+    b.appendChild(n);
     b.onclick = function(){
       bar.querySelectorAll('.filter-btn').forEach(function(x){ x.classList.remove('active'); });
       b.classList.add('active');
+      centreChip(bar, b);
       render('category', ev.slug, actSlug);
       history.replaceState(null, '', '?cat=' + ev.slug + (actSlug ? '&act=' + actSlug : ''));
     };
     bar.appendChild(b);
+    return b;
   }
-  chip('All', null);
-  ev.acts.forEach(function(a){ chip(a.label, a.slug); });
+  chip('All', ev.count, null);
+  ev.acts.forEach(function(a){ chip(a.label, a.count, a.slug); });
+  var active = bar.querySelector('.filter-btn.active');
+  if(active) centreChip(bar, active);
+}
+
+/* On phones the chip row scrolls sideways; keep the chosen chip in view */
+function centreChip(bar, b){
+  if(bar.scrollWidth > bar.clientWidth){
+    bar.scrollLeft = b.offsetLeft - (bar.clientWidth - b.offsetWidth) / 2;
+  }
 }
 
 /* ── Filter + render ─────────────────────────────────────── */
@@ -565,12 +625,33 @@ function render(type, val, act){
   });
   document.getElementById('emptyMsg').classList.toggle('visible', visible.length === 0);
   document.getElementById('galleryCount').textContent = visible.length > 0 ? visible.length + ' photos' : '';
+  var ev = (type === 'category') ? eventsBySlug[val] : null;
+  var grouped = !!(ev && ev.acts && ev.acts.length >= 2 && !act);
+  var actCounts = {};
+  if(grouped) ev.acts.forEach(function(a){ actCounts[a.slug] = a.count; });
   var ttl = document.getElementById('galleryTitle');
   if(type === 'all') ttl.textContent = 'All Photos';
   else if(type === 'group') ttl.textContent = val === 'latest' ? 'Latest Work' : val.charAt(0).toUpperCase() + val.slice(1);
-  else ttl.textContent = visible[0] ? visible[0].categoryLabel : val;
+  else ttl.textContent = visible[0] ? visible[0].categoryLabel + (act && visible[0].actLabel ? ' \u00b7 ' + visible[0].actLabel : '') : val;
 
+  var lastAct = null;
   visible.forEach(function(img, idx){
+    /* "All" view of a multi-act event: a titled section per act */
+    if(grouped && img.act && img.act !== lastAct){
+      var head = document.createElement('div');
+      head.className = 'act-head';
+      var hn = document.createElement('span');
+      hn.className = 'act-head-name';
+      hn.textContent = img.actLabel;
+      var hc = document.createElement('span');
+      hc.className = 'act-head-count';
+      var c = actCounts[img.act];
+      hc.textContent = c + ' photo' + (c !== 1 ? 's' : '');
+      head.appendChild(hn);
+      head.appendChild(hc);
+      grid.appendChild(head);
+    }
+    lastAct = img.act || null;
     var item = document.createElement('div');
     item.className = 'grid-item';
     item.setAttribute('role', 'button');
