@@ -440,11 +440,13 @@ async function load(){
     allImgs = data.images || [];
     var cat = getParam('cat');
     var grp = getParam('group');
+    eventsBySlug = {};
+    (data.groups || []).forEach(function(g){
+      g.categories.forEach(function(c){ eventsBySlug[c.slug] = c; });
+    });
     buildNav(data.groups || []);
     if(cat){
-      document.getElementById('filterBar').style.display = 'none';
-      var navBtn = document.querySelector('[data-cat="' + cat + '"]');
-      filterBy('category', cat, navBtn);
+      showEvent(cat, getParam('act'), document.querySelector('[data-cat="' + cat + '"]'));
     } else {
       buildFilterBar(data.groups || []);
       if(grp){
@@ -478,8 +480,7 @@ function buildNav(groups){
       btn.textContent = c.label;
       btn.dataset.cat = c.slug;
       btn.onclick = function(){
-        document.getElementById('filterBar').style.display = 'none';
-        filterBy('category', c.slug, btn);
+        showEvent(c.slug, null, btn);
         history.replaceState(null, '', '?cat=' + c.slug);
         closeSidebar();
       };
@@ -507,21 +508,59 @@ function buildFilterBar(groups){
   });
 }
 
+/* ── Event view (with optional act chips) ────────────────── */
+var eventsBySlug = {};
+
+function showEvent(slug, actSlug, navBtn){
+  var ev = eventsBySlug[slug];
+  var acts = (ev && ev.acts) || [];
+  /* Only offer act chips when there is something to choose between */
+  var showChips = acts.length >= 2;
+  if(!showChips || (actSlug && !acts.some(function(a){ return a.slug === actSlug; }))) actSlug = null;
+  filterBy('category', slug, navBtn, actSlug);
+  if(showChips) buildActBar(ev, actSlug);
+  else document.getElementById('filterBar').style.display = 'none';
+}
+
+function buildActBar(ev, selected){
+  var bar = document.getElementById('filterBar');
+  bar.style.display = '';
+  bar.innerHTML = '';
+  var lbl = document.createElement('span');
+  lbl.className = 'filter-label';
+  lbl.textContent = 'Acts';
+  bar.appendChild(lbl);
+  function chip(text, actSlug){
+    var b = document.createElement('button');
+    b.className = 'filter-btn' + ((selected || null) === actSlug ? ' active' : '');
+    b.textContent = text;
+    b.onclick = function(){
+      bar.querySelectorAll('.filter-btn').forEach(function(x){ x.classList.remove('active'); });
+      b.classList.add('active');
+      render('category', ev.slug, actSlug);
+      history.replaceState(null, '', '?cat=' + ev.slug + (actSlug ? '&act=' + actSlug : ''));
+    };
+    bar.appendChild(b);
+  }
+  chip('All', null);
+  ev.acts.forEach(function(a){ chip(a.label, a.slug); });
+}
+
 /* ── Filter + render ─────────────────────────────────────── */
-function filterBy(type, val, btn){
+function filterBy(type, val, btn, act){
   document.querySelectorAll('.nav-link').forEach(function(l){ l.classList.remove('active'); });
   document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
   if(btn) btn.classList.add('active');
-  render(type, val);
+  render(type, val, act);
 }
 
-function render(type, val){
+function render(type, val, act){
   var grid = document.getElementById('grid');
   grid.innerHTML = '';
   visible = allImgs.filter(function(i){
     if(type === 'all') return true;
     if(type === 'group') return i.group === val;
-    if(type === 'category') return i.category === val;
+    if(type === 'category') return i.category === val && (!act || i.act === act);
     return true;
   });
   document.getElementById('emptyMsg').classList.toggle('visible', visible.length === 0);
@@ -548,7 +587,14 @@ function render(type, val){
 
     var ov = document.createElement('div');
     ov.className = 'grid-item-overlay';
-    ov.innerHTML = '<span class="overlay-title">' + img.title + '</span><span class="overlay-cat">' + img.categoryLabel + '</span>';
+    var ovT = document.createElement('span');
+    ovT.className = 'overlay-title';
+    ovT.textContent = img.actLabel || img.title;
+    var ovC = document.createElement('span');
+    ovC.className = 'overlay-cat';
+    ovC.textContent = img.categoryLabel;
+    ov.appendChild(ovT);
+    ov.appendChild(ovC);
 
     item.appendChild(im);
     item.appendChild(ov);
@@ -572,7 +618,7 @@ function updateLb(){
   el.src = img.src;
   el.alt = img.title;
   [lbIdx + 1, lbIdx - 1].forEach(function(n){ if(visible[n]){ new Image().src = visible[n].src; } });
-  document.getElementById('lbTitle').textContent = img.title;
+  document.getElementById('lbTitle').textContent = img.actLabel || img.title;
   document.getElementById('lbCat').textContent = img.categoryLabel;
   document.getElementById('lbCounter').textContent = (lbIdx + 1) + ' / ' + visible.length;
 }

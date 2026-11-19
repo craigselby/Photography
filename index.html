@@ -267,13 +267,13 @@ function buildHighlights(){
   picks.forEach(function(img){
     var a=document.createElement('a');
     a.className='latest-card';
-    a.href='gallery.html?cat='+img.category;
+    a.href='gallery.html?cat='+img.category+(img.act?'&act='+img.act:'');
     var im=document.createElement('img');
     im.src=img.thumb||img.src;im.alt=img.title;im.loading='lazy';
     var ov=document.createElement('div');
     ov.className='latest-card-overlay';
     var cat=document.createElement('span');
-    cat.className='latest-card-cat';cat.textContent=img.categoryLabel;
+    cat.className='latest-card-cat';cat.textContent=(img.actLabel?img.actLabel+' \u00b7 ':'')+img.categoryLabel;
     ov.appendChild(cat);a.appendChild(im);a.appendChild(ov);grid.appendChild(a);
   });
 }
@@ -319,7 +319,7 @@ function buildCats(){
       }
       var ov=document.createElement('div');
       ov.className='cat-card-overlay';
-      ov.innerHTML='<span class="cat-card-label">'+g.label+'</span><span class="cat-card-title">'+c.label+'</span><span class="cat-card-count">'+imgs.length+' photo'+(imgs.length!==1?'s':'')+'</span>';
+      ov.innerHTML='<span class="cat-card-label">'+g.label+'</span><span class="cat-card-title">'+c.label+'</span><span class="cat-card-count">'+((c.acts&&c.acts.length>1)?c.acts.length+' acts \u00b7 ':'')+imgs.length+' photo'+(imgs.length!==1?'s':'')+'</span>';
       a.appendChild(ov);grid.appendChild(a);
     });
     blk.appendChild(grid);wrap.appendChild(blk);

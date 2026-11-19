@@ -29,22 +29,19 @@ jobs:
           GROUPS = ['latest', 'general', 'music', 'sports']
 
           def slugify(name):
-              return name.lower().replace(' ', '-').replace('_', '-')
+              # Same scheme as before (so existing ?cat= links keep working),
+              # plus stripping any character that could break a URL or selector.
+              slug = name.lower().replace(' ', '-').replace('_', '-')
+              return re.sub(r'[^a-z0-9-]', '', slug)
 
-          def labelify(slug):
-              overrides = {
-                  'm2m': 'Metal 2 The Masses -',
-                  'ffltech': 'FFLtech',
-                  'gv70': 'gv70',
-                  'ngpw': 'NGPW',
-              }
-              words = slug.replace('-', ' ').replace('_', ' ').split()
-              result = []
-              for word in words:
-                  low = word.lower()
-                  result.append(overrides[low] if low in overrides else word.capitalize())
-              return ' '.join(result)
-              
+          def labelify(name):
+              # Folder names are shown exactly as written ("BlackCat Bridgend",
+              # "Children of the Gravy"). Only all-lowercase names get tidied up.
+              name = name.strip()
+              if name != name.lower():
+                  return name
+              return ' '.join(w.capitalize() for w in re.split(r'[\s_-]+', name) if w)
+
           def extract_keywords(filepath):
               keywords = []
               try:
@@ -90,50 +87,87 @@ jobs:
           featured_count = 0
           total_count = 0
 
+          def list_images(path):
+              return [f for f in sorted(os.listdir(path))
+                      if os.path.isfile(os.path.join(path, f))
+                      and os.path.splitext(f)[1].lower() in IMAGE_EXTENSIONS]
+
           for group in GROUPS:
               group_path = os.path.join(images_root, group)
               if not os.path.isdir(group_path):
                   continue
               categories = []
+              # Each folder here is an EVENT. Inside an event, photos either sit
+              # directly in the folder (single-act events) or in ACT sub-folders:
+              #   images/music/<Event>/<photo>.jpg
+              #   images/music/<Event>/<Act>/<photo>.jpg
               for category in sorted(os.listdir(group_path)):
                   cat_path = os.path.join(group_path, category)
                   if not os.path.isdir(cat_path):
                       continue
-                  image_files = [f for f in sorted(os.listdir(cat_path))
-                                 if os.path.splitext(f)[1].lower() in IMAGE_EXTENSIONS]
-                  if not image_files:
-                      continue
                   cat_slug = slugify(category)
                   cat_label = labelify(category)
-                  categories.append({'slug': cat_slug, 'label': cat_label})
 
-                  for fname in image_files:
-                      fpath = os.path.join(cat_path, fname)
-                      keywords = extract_keywords(fpath)
-                      featured = 'featured' in keywords
-                      highlight = 'highlight' in keywords
+                  # (act_folder or None, files) in display order: loose photos first
+                  batches = []
+                  loose = list_images(cat_path)
+                  if loose:
+                      batches.append((None, loose))
+                  for sub in sorted(os.listdir(cat_path)):
+                      sub_path = os.path.join(cat_path, sub)
+                      if not os.path.isdir(sub_path):
+                          continue
+                      sub_files = list_images(sub_path)
+                      if sub_files:
+                          batches.append((sub, sub_files))
+                      for deeper in os.listdir(sub_path):
+                          if os.path.isdir(os.path.join(sub_path, deeper)):
+                              print(f'  Warning: ignoring {sub_path}/{deeper} (only Event/Act folders are read)')
+                  if not batches:
+                      continue
 
-                      # Every photo goes in the gallery; featured ones also become the category cover
-                      title = os.path.splitext(fname)[0].replace('-', ' ').replace('_', ' ').title()
-                      thumb = make_thumb(fpath)
-                      manifest['images'].append({
-                          'src': f'images/{group}/{category}/{fname}',
-                          'thumb': thumb,
-                          'title': title,
-                          'category': cat_slug,
-                          'group': group,
-                          'categoryLabel': cat_label,
-                      })
-                      total_count += 1
+                  acts = []
+                  event_count = 0
+                  for act_folder, image_files in batches:
+                      act_slug = slugify(act_folder) if act_folder else None
+                      act_label = labelify(act_folder) if act_folder else None
+                      if act_folder:
+                          acts.append({'slug': act_slug, 'label': act_label, 'count': len(image_files)})
+                      folder = os.path.join(cat_path, act_folder) if act_folder else cat_path
+                      rel_folder = f'images/{group}/{category}' + (f'/{act_folder}' if act_folder else '')
 
-                      if highlight:
-                          manifest['highlights'].append(dict(manifest['images'][-1]))
+                      for fname in image_files:
+                          fpath = os.path.join(folder, fname)
+                          keywords = extract_keywords(fpath)
+                          featured = 'featured' in keywords
+                          highlight = 'highlight' in keywords
 
-                      if featured:
-                          manifest['featured_covers'][cat_slug] = f'images/{group}/{category}/{fname}'
-                          manifest['featured_thumbs'][cat_slug] = thumb
-                          featured_count += 1
-                          print(f'  [FEATURED] {fname}')
+                          # Every photo goes in the gallery; featured ones also become the event cover
+                          title = act_label or os.path.splitext(fname)[0].replace('-', ' ').replace('_', ' ').title()
+                          thumb = make_thumb(fpath)
+                          manifest['images'].append({
+                              'src': f'{rel_folder}/{fname}',
+                              'thumb': thumb,
+                              'title': title,
+                              'category': cat_slug,
+                              'group': group,
+                              'categoryLabel': cat_label,
+                              'act': act_slug,
+                              'actLabel': act_label,
+                          })
+                          total_count += 1
+                          event_count += 1
+
+                          if highlight:
+                              manifest['highlights'].append(dict(manifest['images'][-1]))
+
+                          if featured:
+                              manifest['featured_covers'][cat_slug] = f'{rel_folder}/{fname}'
+                              manifest['featured_thumbs'][cat_slug] = thumb
+                              featured_count += 1
+                              print(f'  [FEATURED] {fname}')
+
+                  categories.append({'slug': cat_slug, 'label': cat_label, 'count': event_count, 'acts': acts})
 
               if categories:
                   group_label = 'Latest Work' if group == 'latest' else group.capitalize()
