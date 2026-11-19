@@ -1,0 +1,183 @@
+#!/usr/bin/env python3
+"""
+build_manifest.py - local copy of the GitHub Action's gallery builder.
+
+Run from the repo root (the folder containing images/ and index.html):
+
+    pip install Pillow          # once
+    python3 build_manifest.py   # Windows: py build_manifest.py
+    python3 -m http.server 8000 # then open http://localhost:8000
+
+It rebuilds images.json and thumbs/ exactly like the workflow does, so what
+you see locally matches what the site will do after you push.
+Before your next push, run `git pull` first: the Action also commits
+images.json and thumbs/.
+"""
+import os, json, re
+from PIL import Image, ImageOps
+
+IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.webp'}
+GROUPS = ['latest', 'general', 'music', 'sports']
+
+def slugify(name):
+    # Same scheme as before (so existing ?cat= links keep working),
+    # plus stripping any character that could break a URL or selector.
+    slug = name.lower().replace(' ', '-').replace('_', '-')
+    return re.sub(r'[^a-z0-9-]', '', slug)
+
+def labelify(name):
+    # Folder names are shown exactly as written ("BlackCat Bridgend",
+    # "Children of the Gravy"). Only all-lowercase names get tidied up.
+    name = name.strip()
+    if name != name.lower():
+        return name
+    return ' '.join(w.capitalize() for w in re.split(r'[\s_-]+', name) if w)
+
+def extract_keywords(filepath):
+    keywords = []
+    try:
+        with open(filepath, 'rb') as f:
+            data = f.read()
+        for m in re.finditer(rb'<x:xmpmeta.*?</x:xmpmeta>', data, re.S):
+            xmp = m.group(0).decode('utf-8', errors='ignore')
+            for block in re.findall(r'<dc:subject>.*?</dc:subject>', xmp, re.S):
+                keywords += [s.strip().lower() for s in re.findall(r'<rdf:li[^>]*>([^<]+)</rdf:li>', block) if s.strip()]
+    except Exception as e:
+        print(f'  Warning: could not read metadata from {filepath}: {e}')
+    return keywords
+
+THUMB_SHORT_SIDE = 640
+kept_thumbs = set()
+
+def make_thumb(src):
+    # Mirror images/<group>/<category>/<file> into thumbs/, shortest side 640px
+    dest = os.path.splitext(os.path.join('thumbs', os.path.relpath(src, 'images')))[0] + '.jpg'
+    dest = dest.replace(os.sep, '/')
+    kept_thumbs.add(dest)
+    if not os.path.exists(dest):
+        os.makedirs(os.path.dirname(dest), exist_ok=True)
+        with Image.open(src) as im:
+            im = ImageOps.exif_transpose(im).convert('RGB')
+            w, h = im.size
+            scale = THUMB_SHORT_SIDE / min(w, h)
+            if scale < 1:
+                im = im.resize((round(w * scale), round(h * scale)), Image.LANCZOS)
+            im.save(dest, 'JPEG', quality=78, optimize=True, progressive=True)
+    return dest
+
+manifest = {'groups': [], 'images': [], 'featured_covers': {}, 'featured_thumbs': {}, 'highlights': []}
+os.makedirs('thumbs', exist_ok=True)
+images_root = 'images'
+
+if not os.path.exists(images_root):
+    print('No images folder found')
+    with open('images.json', 'w') as f:
+        json.dump(manifest, f, indent=2)
+    exit()
+
+featured_count = 0
+total_count = 0
+
+def list_images(path):
+    return [f for f in sorted(os.listdir(path))
+            if os.path.isfile(os.path.join(path, f))
+            and os.path.splitext(f)[1].lower() in IMAGE_EXTENSIONS]
+
+for group in GROUPS:
+    group_path = os.path.join(images_root, group)
+    if not os.path.isdir(group_path):
+        continue
+    categories = []
+    # Each folder here is an EVENT. Inside an event, photos either sit
+    # directly in the folder (single-act events) or in ACT sub-folders:
+    #   images/music/<Event>/<photo>.jpg
+    #   images/music/<Event>/<Act>/<photo>.jpg
+    for category in sorted(os.listdir(group_path)):
+        cat_path = os.path.join(group_path, category)
+        if not os.path.isdir(cat_path):
+            continue
+        cat_slug = slugify(category)
+        cat_label = labelify(category)
+
+        # (act_folder or None, files) in display order: loose photos first
+        batches = []
+        loose = list_images(cat_path)
+        if loose:
+            batches.append((None, loose))
+        for sub in sorted(os.listdir(cat_path)):
+            sub_path = os.path.join(cat_path, sub)
+            if not os.path.isdir(sub_path):
+                continue
+            sub_files = list_images(sub_path)
+            if sub_files:
+                batches.append((sub, sub_files))
+            for deeper in os.listdir(sub_path):
+                if os.path.isdir(os.path.join(sub_path, deeper)):
+                    print(f'  Warning: ignoring {sub_path}/{deeper} (only Event/Act folders are read)')
+        if not batches:
+            continue
+
+        acts = []
+        event_count = 0
+        for act_folder, image_files in batches:
+            act_slug = slugify(act_folder) if act_folder else None
+            act_label = labelify(act_folder) if act_folder else None
+            if act_folder:
+                acts.append({'slug': act_slug, 'label': act_label, 'count': len(image_files)})
+            folder = os.path.join(cat_path, act_folder) if act_folder else cat_path
+            rel_folder = f'images/{group}/{category}' + (f'/{act_folder}' if act_folder else '')
+
+            for fname in image_files:
+                fpath = os.path.join(folder, fname)
+                keywords = extract_keywords(fpath)
+                featured = 'featured' in keywords
+                highlight = 'highlight' in keywords
+
+                # Every photo goes in the gallery; featured ones also become the event cover
+                title = act_label or os.path.splitext(fname)[0].replace('-', ' ').replace('_', ' ').title()
+                thumb = make_thumb(fpath)
+                manifest['images'].append({
+                    'src': f'{rel_folder}/{fname}',
+                    'thumb': thumb,
+                    'title': title,
+                    'category': cat_slug,
+                    'group': group,
+                    'categoryLabel': cat_label,
+                    'act': act_slug,
+                    'actLabel': act_label,
+                })
+                total_count += 1
+                event_count += 1
+
+                if highlight:
+                    manifest['highlights'].append(dict(manifest['images'][-1]))
+
+                if featured:
+                    manifest['featured_covers'][cat_slug] = f'{rel_folder}/{fname}'
+                    manifest['featured_thumbs'][cat_slug] = thumb
+                    featured_count += 1
+                    print(f'  [FEATURED] {fname}')
+
+        categories.append({'slug': cat_slug, 'label': cat_label, 'count': event_count, 'acts': acts})
+
+    if categories:
+        group_label = 'Latest Work' if group == 'latest' else group.capitalize()
+        manifest['groups'].append({
+            'slug': group,
+            'label': group_label,
+            'categories': categories
+        })
+
+# Remove thumbnails whose original photo no longer exists
+for root, dirs, files in os.walk('thumbs', topdown=False):
+    for name in files:
+        path = os.path.join(root, name).replace(os.sep, '/')
+        if path not in kept_thumbs:
+            os.remove(path)
+    if root != 'thumbs' and not os.listdir(root):
+        os.rmdir(root)
+
+with open('images.json', 'w') as f:
+    json.dump(manifest, f, indent=2)
+
+print(f'Done: {total_count} gallery images, {featured_count} featured covers, {len(manifest["highlights"])} highlights')
